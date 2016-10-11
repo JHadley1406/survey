@@ -1,0 +1,19 @@
+{% extends "nav.html" %}
+{% block body %}
+{%  load crispy_forms_tags %}
+<div class="block col-md-4 col-md-offset-4">
+    <div class="panel panel-default">
+        <div class="panel-header text-center">
+            <span class="panel-title">Create Account</span>
+        </div>
+        <div class="panel-body">
+            <form action="{% url 'add_user' %}" method="POST">
+                {% csrf_token %}
+                {% crispy form %}
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

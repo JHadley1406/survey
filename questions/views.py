@@ -206,3 +206,23 @@ class TakenSurveyView(View):
         return render(request,
                       self.template_name,
                       dict(survey=survey, answers=answers))
+
+
+class CreateUserView(View):
+    template_name = "create_user.html"
+
+    def get(self, request):
+        user_form = CreateUserForm()
+        return render(request, self.template_name, dict(form=user_form))
+
+    def post(self, request):
+        user_form = CreateUserForm(request.POST)
+        if user_form.is_valid():
+            user = User.objects.create_user(user_form.cleaned_data['username'], None, user_form.cleaned_data['password1'])
+            if 'first_name' in user_form.cleaned_data:
+                user.first_name = user_form.cleaned_data['first_name']
+            if 'last_name' in user_form.cleaned_data:
+                user.last_name = user_form.cleaned_data['last_name']
+            user.save()
+            return HttpResponseRedirect(reverse(index_page))
+        return render(request, self.template_name, dict(form=user_form))

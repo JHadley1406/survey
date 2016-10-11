@@ -30,4 +30,5 @@ urlpatterns = [
     url(r'^taken_survey/(?P<survey_id>(\d+))$', TakenSurveyView.as_view(), name="taken_survey"),
     url(r'^survey_list/$', SurveyListView.as_view(), name="survey_list"),
     url(r'^user_survey/', UserSurveyView.as_view(), name="user_survey"),
+    url(r'^add_user/$', CreateUserView.as_view(), name="add_user"),
 ]

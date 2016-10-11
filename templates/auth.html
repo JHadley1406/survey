@@ -17,6 +17,7 @@
                 <span>{{ login_form.password }}</span>
                 <span><input type="submit" value="Log In"/></span>
         </form>
+            <span><a href="{% url 'add_user' %}">Create Account</a></span>
         {% endif %}
     </div>
 {% endblock %}

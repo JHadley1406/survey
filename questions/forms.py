@@ -13,6 +13,7 @@ from django.forms import ModelForm, \
     TextInput, \
     PasswordInput
 from django.forms.formsets import formset_factory
+from django.core.exceptions import ValidationError
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field
 from models import *
@@ -28,6 +29,24 @@ def required(question):
 class LoginForm(Form):
     username = CharField(label="Username", max_length=25, widget=TextInput())
     password = CharField(label="Password", max_length=25, widget=PasswordInput())
+
+
+class CreateUserForm(Form):
+    username = CharField(label="User Name", max_length=25, widget=TextInput(), required=True)
+    first_name = CharField(label="First Name", max_length=25, widget=TextInput())
+    last_name = CharField(label="Last Name", max_length=25, widget=TextInput())
+    password1 = CharField(label="Password", max_length=50, widget=PasswordInput(), required=True)
+    password2 = CharField(label="Confirm Password", max_length=50, widget=PasswordInput(), required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(CreateUserForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+
+    def clean(self, *args, **kwargs):
+        super(CreateUserForm, self).clean(*args, **kwargs)
+        if not self.cleaned_data.get('password1') == self.cleaned_data.get('password2'):
+            raise ValidationError("Passwords do not match")
 
 
 class TextForm(Form):
