@@ -1,0 +1,44 @@
+# Byte compiled files
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+# Distribution/Packaging
+.Python
+venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# SQLite
+*.sqlite3
+Discussions/migrations/
+Communities/migrations/
+OnRamp/migrations/
+Profile/migrations/
+Merge/migrations
+Messaging/migrations
+rating/migrations
+tutoring/migrations
+College/migrations
+CourseCatalog/migrations
+Pathways/migrations
+GradeBook/migrations
+
+# PyCharm
+.idea/
+
+# Git
+.git/

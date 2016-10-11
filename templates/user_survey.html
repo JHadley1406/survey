@@ -1,0 +1,49 @@
+{% extends "nav.html" %}
+{% block body %}
+    {% if user.is_authenticated %}
+        <div class="col-md-3 panel panel-default">
+            <div class="panel-header">
+                <span class="panel-title">Unpublished Surveys</span>
+            </div>
+            <div class="panel-body">
+                {% for survey in created_surveys %}
+                    <div>
+                        {{ survey.name }}
+                        <a href="{% url 'add_survey' survey_id=survey.id %}">Edit</a>
+                        <a href="{% url 'delete_survey' survey_id=survey.id %}">Delete</a>
+                        <a href="{% url 'publish_survey' survey_id=survey.id %}">Publish</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-3 panel panel-default">
+            <div class="panel-header">
+                <span class="panel-title">Published Surveys</span>
+            </div>
+            <div class="panel-body">
+                {% for survey in published_surveys %}
+                    <div>
+                        <a href="#">{{ survey.name }}</a>
+                        <a href="{% url 'delete_survey' survey_id=survey.id %}">Delete</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-3 panel panel-default">
+            <div class="panel-header">
+                <span class="panel-title">Taken Surveys</span>
+            </div>
+            <div class="panel-body">
+                {% for survey in taken_surveys %}
+                    <div>
+                        <a href="{% url 'taken_survey' survey_id=survey.id %}">{{ survey.name }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center">
+            <span >Please Log In</span>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,31 @@
+<html>
+<head>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    <script type="text/javascript"
+        src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
+    </script>
+    <script type="text/javascript"
+        src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js">
+    </script>
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <div class="container-fluid">
+        <div class="row">
+            {% block login %}
+            {% endblock %}
+        </div>
+        <div class="row">
+            {% block nav %}
+            {% endblock %}
+        </div>
+        <div class="row">
+            {% block body %}
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>

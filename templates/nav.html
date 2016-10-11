@@ -1,0 +1,17 @@
+{% extends "auth.html" %}
+{% block nav %}
+    <nav class="navbar navbar-default">
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'survey_index' %}">Index</a></li>
+                <li><a href="{% url 'add_survey'  %}">New Survey</a></li>
+                <li><a href="{% url 'survey_list' %}">Survey List</a></li>
+                <li><a href="{% url 'user_survey' %}">Your Surveys</a></li>
+                {% if user.is_superuser %}
+                    <li><a href="/admin">Admin</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+{% endblock %}

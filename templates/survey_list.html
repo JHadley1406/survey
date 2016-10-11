@@ -1,0 +1,15 @@
+{% extends "nav.html" %}
+{% block body %}
+    <div class="col-md-3 panel panel-default">
+        <div class="panel-header">
+            <span class="panel-title">Available Surveys</span>
+        </div>
+        <div class="panel-body">
+            {% for survey in surveys %}
+            <div>
+                <a href="{% url 'survey' survey_id=survey.id %}">{{ survey.name }}</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

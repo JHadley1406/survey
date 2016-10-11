@@ -1,0 +1,22 @@
+{%  extends "base.html" %}
+{%  block login %}
+{% load static %}
+    <div id="login" class="pull-right col-mid-3">
+        {% if user.username %}
+        <div>
+            <span>Logged In As: <span>{{ user.username }}</span></span>
+            <div>
+                <a href="{% url 'logout' %}">Logout</a>
+            </div>
+        </div>
+        {% else %}
+
+        <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <span>{{ login_form.username }}</span>
+                <span>{{ login_form.password }}</span>
+                <span><input type="submit" value="Log In"/></span>
+        </form>
+        {% endif %}
+    </div>
+{% endblock %}

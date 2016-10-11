@@ -1,0 +1,200 @@
+{% extends "nav.html" %}
+{% block body %}
+    {%  load crispy_forms_tags %}
+
+<script type="text/javascript">
+
+
+    $(document).ready(function(){
+        function updateElementIndex(element, regex, index){
+            var replacement = 'form-' + index + '-';
+            if($(element).attr("for"))
+                $(element).attr("for", $(element).attr("for").replace(regex, replacement));
+            if(element.id)
+                element.id = element.id.replace(regex, replacement);
+            if(element.name)
+                element.name = element.name.replace(regex, replacement);
+        }
+
+        function reOrderNodes(){
+            var i = 0;
+            $('.item').each(function () {
+                $(this).attr('id', 'item-' + i);
+                var id_regex = new RegExp('(form-\\d+-)');
+                var children = $(this).children().find("*").filter(function () {
+                    return id_regex.test($(this).attr("id"));
+                });
+                children.each(function () {
+                    updateElementIndex(this, id_regex, i);
+                });
+                i++;
+            });
+        }
+
+        function compileTemplate(template){
+            var count = $('#items-form-container').children().length;
+            return template.replace(/__prefix__/g, count-1);
+        }
+
+        function addSelectItem(element){
+            var itemCount = $(element).children('.select-item').length;
+            var itemTemplate = compileTemplate($('#select-item').html());
+            var compiledItemTemplate = itemTemplate.replace(/__item__/g, itemCount);
+            $(compiledItemTemplate).appendTo(element);
+        }
+
+        function addChoiceDiv(element, input_count){
+            if($(element.parentNode).children('.choice-div').length == 0){
+                $(compileTemplate($('#select-div').html())).appendTo(element.parentNode);
+                for(var i=0; i<input_count; i++) {
+                    addSelectItem($(element.parentNode).find('.choice-div'));
+                }
+            } else{
+                $(element.parentNode).find('.choice-div').show();
+            }
+        }
+
+        $('#items-form-container').find('.choices_field').each(function() {
+            if(this.hasAttribute('value') && $(this).attr('value').length > 0){
+                var choices = $(this).attr('value');
+                var choice_list = choices.split(',');
+                addChoiceDiv(this, choice_list.length);
+                var i = 0;
+                $(this.parentNode).find('.select-item').each(function(){
+                    $(this).attr('value', choice_list[i]);
+                    i++;
+                });
+            }
+        });
+
+        $("#items-form-container").sortable({
+            stop: function(event, ui){reOrderNodes();}
+        });
+
+        $(".add").click(function(ev){
+            ev.preventDefault();
+            var count = $('#items-form-container').children().length;
+            var tmplMarkup = $('#item-template').html();
+            var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+            $(compiledTmpl).draggable({
+                connectToSortable: "#items-form-container"
+            });
+            $('div#items-form-container').append(compiledTmpl);
+            // Update form count
+            $('#id_form-TOTAL_FORMS').attr('value', count+1);
+        });
+
+        $("#items-form-container").on('click', '.remove', function(){
+            var count = $('#items-form-container').children().length;
+            if(count > 1) {
+                this.parentNode.remove();
+                $('#id_form-TOTAL_FORMS').attr('value', count - 1);
+                reOrderNodes();
+            }
+            else {
+                alert("Surveys must have at least one question.");
+            }
+        });
+
+        $('#items-form-container').on('change', '.select', function(){
+            var selected_text = $(this).val();
+            if(selected_text == 'Radio' || selected_text == 'Select' || selected_text == 'Select-Multiple'){
+                addChoiceDiv(this, 2);
+            } else{
+                $(this.parentNode).find(".choice-div").hide();
+            }
+        });
+
+        $('#items-form-container').on('click', '.add-item', function(){
+           addSelectItem(this.parentNode);
+        });
+
+        $('#items-form-container').on('click', '.delete-item', function(){
+            if($(this.parentNode.parentNode).find('.select-item').length >2){
+                this.parentNode.remove();
+            } else{
+                alert("This question type requires at least 2 answers");
+            }
+
+        });
+
+        $('#items-form-container').on('keyup', '.select-item', function(){
+            var choices = [];
+            var choice_node = $(this.parentNode.parentNode.parentNode.parentNode.parentNode).find('.choices_field');
+            $(this.parentNode.parentNode).find('.select-item').each(function(){
+                if($(this).val() != '') {
+                    choices.push($(this).val());
+                }
+            });
+            if(choices.length > 1){
+                $(choice_node).attr('value', choices.toString());
+            }
+            console.log($(choice_node).attr('id'));
+            console.log($(choice_node).attr('value'));
+
+        });
+    });
+
+</script>
+
+
+    <div class="block col-md-4 col-md-offset-4">
+        <div class="panel panel-default">
+        {% if user.is_authenticated %}
+            <div class="panel-header text-center">
+                <span class="panel-title">Create Survey</span>
+            </div>
+            <div class="panel-body">
+                <form action="{% url 'add_survey'  %}" method="POST">
+                    <script type="text/html" id="item-template">
+                        <div id="item-__prefix__" class="item panel panel-default">
+                            {% crispy question_formset.empty_form question_formset.form.helper %}
+                            <a class="remove" id="id-form-__prefix__-remove" href="#">Delete</a>
+                        </div>
+                    </script>
+                    <script type="text/html" id="select-div">
+                        <div id="id-select-items-form-__prefix__-div" class="choice-div">
+                            <input type="button" class="add-item" id="id-form-__prefix__-add-item" value="Add Choice">
+                        </div>
+                    </script>
+                    <script type="text/html" id="select-item">
+                        <div id="id-select-item-for-form-__prefix__-div">
+                            <input type="text" id="id-select-item-__item__" class="select-item"/>
+                            <input type="button" class="delete-item" id="id-delete-item-__item__" value="X"/>
+                        </div>
+                    </script>
+                    {% csrf_token %}
+                    <div class="panel panel-default">
+                        <div class="panel-header">
+                            {% crispy survey_form %}
+                        </div>
+                        <div class="panel-title text-center">
+                            Questions
+                        </div>
+                        <div class="panel-body">
+                            {{ question_formset.management_form|crispy }}
+                            <div id="items-form-container">
+                                {% for form in question_formset %}
+                                    <div id="item-{{ forloop.counter0 }}" class="item panel panel-default">
+                                        {{ form.id }}
+                                        {% crispy form %}
+                                        <a class="remove" id="id-form-{{ forloop.counter0 }}-remove" href="#">Delete</a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a class="add" href="#">Add</a>
+                            <input type="submit" value="Save">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+        {% else %}
+            <div class="text-center">
+                Please log in to create a survey
+            </div>
+        {% endif %}
+{% endblock %}

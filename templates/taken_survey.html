@@ -1,0 +1,20 @@
+{% extends "nav.html" %}
+{% block body %}
+<div>
+    <div>
+        {{ survey.name }}
+    </div>
+    <div>
+        {{ survey.description }}
+    </div>
+</div>
+    <div>
+    {% for answer in answers %}
+        <div><span>Answer by: </span><span>{{ answer.taker }}</span></div>
+        <div>Question:</div>
+        <div>{{ answer.question.text }}</div>
+        <div>{{ answer.body }}</div>
+    {% endfor %}
+    </div>
+
+{% endblock %}
