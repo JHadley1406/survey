@@ -3,6 +3,7 @@ from django.template import RequestContext
 from django.views.generic import View
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 
 from models import *
 from forms import *
@@ -105,7 +106,7 @@ class SurveyView(View):
     def get(self, request, survey_id):
         can_take = True
         survey = Survey.objects.get(id=survey_id)
-        if request.user:
+        if request.user.is_authenticated():
             if Answer.objects.filter(taker=request.user, survey=survey).exists():
                 can_take = False
 
@@ -181,7 +182,7 @@ class UserSurveyView(View):
         taken_surveys = []
         created_surveys = []
         published_surveys = []
-        if request.user.is_authenticated:
+        if request.user.is_authenticated():
             taken_surveys = Survey.objects.filter(id__in=Answer.objects.filter(taker=request.user).values('survey_id'))
             created_surveys = Survey.objects.filter(creator=request.user, published=False)
             published_surveys = Survey.objects.filter(creator=request.user, published=True)
