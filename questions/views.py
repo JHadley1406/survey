@@ -225,5 +225,6 @@ class CreateUserView(View):
             if 'last_name' in user_form.cleaned_data:
                 user.last_name = user_form.cleaned_data['last_name']
             user.save()
+            login(request, user)
             return HttpResponseRedirect(reverse(index_page))
         return render(request, self.template_name, dict(form=user_form))
