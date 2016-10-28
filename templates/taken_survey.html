@@ -2,20 +2,20 @@
 {% block body %}
 <div class="panel panel-default">
     <div class="panel-heading">
-        {{ survey.name }}
+        <h3>{{ survey.name }}</h3>
     </div>
     <div class="panel-body">
-        {{ survey.description }}
+        <h3>{{ survey.description }}</h3>
     </div>
 </div>
     <div class="panel panel-default">
     {% for answer in answers %}
         <div class="panel-heading">
-            <span class="label label-default">Answer by: </span><span>{{ answer.taker }}</span>
+            <h3>Answer by: </h3><span>{{ answer.taker }}</span>
         </div>
         <div class="panel-body">
             <div>
-                <span class="label label-default">Question:</span>
+                <h3>Question:</h3>
             </div>
             <div>{{ answer.question.text }}</div>
             <div>{{ answer.body }}</div>
