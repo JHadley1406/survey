@@ -199,14 +199,14 @@ class TakenSurveyView(View):
 
     def get(self, request, survey_id):
         survey = Survey.objects.get(id=survey_id)
-
+        questions = Question.objects.filter(survey=survey).values('id','text')
         if survey.creator == request.user:
             answers = Answer.objects.filter(survey=survey)
         else:
             answers = Answer.objects.filter(survey=survey, taker=request.user)
         return render(request,
                       self.template_name,
-                      dict(survey=survey, answers=answers))
+                      dict(survey=survey, answers=answers, questions=questions))
 
 
 class CreateUserView(View):
