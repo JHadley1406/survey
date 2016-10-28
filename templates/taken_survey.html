@@ -9,17 +9,25 @@
     </div>
 </div>
     <div class="panel panel-default">
-    {% for answer in answers %}
+    {% for question in questions %}
         <div class="panel-heading">
-            <h3>Answer by: </h3><span>{{ answer.taker }}</span>
-        </div>
-        <div class="panel-body">
             <div>
                 <h3>Question:</h3>
             </div>
-            <div>{{ answer.question.text }}</div>
-            <div>{{ answer.body }}</div>
+            <div>{{ question.text }}</div>
         </div>
+        {% for answer in answers %}
+            {% if answer.question.id == question.id %}
+                <div class="panel panel-default panel-body">
+                    <div class="panel-heading">
+                        <span>Answer by: </span><span>{{ answer.taker }}</span>
+                    </div>
+                    <div class="panel-body">
+                        <div>{{ answer.body }}</div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
     {% endfor %}
     </div>
 
