@@ -43,7 +43,7 @@
         </div>
     {% else %}
         <div class="text-center">
-            <span >Please Log In</span>
+            <span>Please log in, or <a href="{% url 'add_user' %}">create an account</a>.</span>
         </div>
     {% endif %}
 {% endblock %}

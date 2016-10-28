@@ -193,8 +193,8 @@
 
     </div>
         {% else %}
-            <div class="text-center">
-                Please log in to create a survey
-            </div>
+        <div class="text-center">
+            <span>Please log in, or <a href="{% url 'add_user' %}">create an account</a>.</span>
+        </div>
         {% endif %}
 {% endblock %}

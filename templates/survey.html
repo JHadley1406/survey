@@ -37,9 +37,9 @@
                 View your results <a href="{% url 'taken_survey' survey_id=survey.id %}">here</a>
             </div>
         {% else %}
-            <div class="text-center">
-                Please log in
-            </div>
+        <div class="text-center">
+            <span>Please log in, or <a href="{% url 'add_user' %}">create an account</a>.</span>
+        </div>
         {% endif %}
     </div>
 </div>
