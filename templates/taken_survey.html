@@ -11,11 +11,14 @@
     <div class="panel panel-default">
     {% for answer in answers %}
         <div class="panel-heading">
-            <span>Answer by: </span><span>{{ answer.taker }}</span>
+            <span class="label label-default">Answer by: </span><span>{{ answer.taker }}</span>
         </div>
-        <div class="panel-body"><div><span>Question:</span></div>
-        <div>{{ answer.question.text }}</div>
-        <div>{{ answer.body }}</div>
+        <div class="panel-body">
+            <div>
+                <span class="label label-default">Question:</span>
+            </div>
+            <div>{{ answer.question.text }}</div>
+            <div>{{ answer.body }}</div>
         </div>
     {% endfor %}
     </div>
