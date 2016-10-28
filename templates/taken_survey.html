@@ -1,19 +1,22 @@
 {% extends "nav.html" %}
 {% block body %}
-<div>
-    <div>
+<div class="panel panel-default">
+    <div class="panel-heading">
         {{ survey.name }}
     </div>
-    <div>
+    <div class="panel-body">
         {{ survey.description }}
     </div>
 </div>
-    <div>
+    <div class="panel panel-default">
     {% for answer in answers %}
-        <div><span>Answer by: </span><span>{{ answer.taker }}</span></div>
-        <div>Question:</div>
+        <div class="panel-heading">
+            <span>Answer by: </span><span>{{ answer.taker }}</span>
+        </div>
+        <div class="panel-body"><div><span>Question:</span></div>
         <div>{{ answer.question.text }}</div>
         <div>{{ answer.body }}</div>
+        </div>
     {% endfor %}
     </div>
 
