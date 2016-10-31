@@ -17,16 +17,16 @@
             <div>{{ question.text }}</div>
         </div>
         {% for answer in answers %}
-            <div class="panel panel-default panel-body">
             {% if answer.question.id == question.id %}
-                <div class="panel-heading">
-                    <span>Answer by: </span><span>{{ answer.taker }}</span>
-                </div>
-                <div class="panel-body">
-                    <div>{{ answer.body }}</div>
+                <div class="panel panel-default panel-body">
+                    <div class="panel-heading">
+                        <span>Answer by: </span><span>{{ answer.taker }}</span>
+                    </div>
+                    <div class="panel-body">
+                        <div>{{ answer.body }}</div>
+                    </div>
                 </div>
             {% endif %}
-            </div>
         {% endfor %}
     {% endfor %}
     </div>
